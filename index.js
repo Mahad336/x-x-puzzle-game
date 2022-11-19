@@ -1,11 +1,18 @@
-const gridItems = document.querySelectorAll(".grid-item");
+const gridContainer = document.querySelector(".grid-container");
+const gContainer = document.getElementById("g-container");
 const btn = document.querySelector(".btn");
 const msg = document.querySelector(".message");
 const dmoves = document.querySelector(".d-moves");
 const dtimer = document.querySelector(".d-timer");
 const drounds = document.querySelector(".d-rounds");
 
-let size = 3;
+let size = 7;
+gridContainer.style.gridTemplateColumns = `repeat(${size},${
+  (size * 13) / size
+}vw)`;
+gridContainer.style.gridTemplateRows = `repeat(${size},${
+  (size * 10) / size
+}vh)`;
 let items = [];
 
 for (let i = 1; i <= size * size; i++) items.push(i);
@@ -29,23 +36,23 @@ function shuffle(array) {
     }
   return array;
 }
-
-const renderItems = () => {
+const makeItems = () => {
   let randomArray = shuffle(items);
 
-  for (let i = 0, j = 0; i < gridItems.length; i++, j++) {
-    if (i < 9) {
-      if (randomArray[j] == 9) gridItems[i].innerHTML = "";
-      else gridItems[i].innerHTML = randomArray[j];
-      // if (items[j] == 9) gridItems[i].innerHTML = "";
-      // else gridItems[i].innerHTML = items[j];
-    } else {
-      let newItem = document.createElement("div");
-      newItem.classList.add("griditem");
-      gridItems.append("box");
-    }
+  for (let i = 0; i < randomArray.length; i++) {
+    let newItem = document.createElement("div");
+    newItem.classList.add("grid-item");
+    newItem.classList.add(`grid-item-${i + 1}`);
+    if (randomArray[i] == size * size) newItem.innerHTML = "";
+    else newItem.innerHTML = randomArray[i];
+    gContainer.appendChild(newItem);
   }
 };
+makeItems();
+
+const gridItems = document.querySelectorAll(".grid-item");
+
+const renderItems = () => {};
 
 renderItems();
 
@@ -56,11 +63,13 @@ const getEmptyItem = () => {
 };
 
 const getAboveitemValue = () => {
-  if (getEmptyItem() > 3) return gridItems[getEmptyItem() - 4].innerHTML;
+  if (getEmptyItem() > size)
+    return gridItems[getEmptyItem() - size - 1].innerHTML;
   else return null;
 };
+
 const getAboveitem = () => {
-  return getEmptyItem() - 3;
+  return getEmptyItem() - size;
 };
 
 const keyUp = () => {
@@ -70,15 +79,17 @@ const keyUp = () => {
   if (aboveitemValue != null) {
     gridItems[aboveitem - 1].innerHTML = "";
     gridItems[emptyitem - 1].innerHTML = aboveitemValue;
+    count++;
   }
 };
 
 const getBelowitemValue = () => {
-  if (getEmptyItem() < 7) return gridItems[getEmptyItem() + 2].innerHTML;
+  if (getEmptyItem() < size * size - size + 1)
+    return gridItems[getEmptyItem() + size - 1].innerHTML;
   else return null;
 };
 const getBelowitem = () => {
-  return getEmptyItem() + 3;
+  return getEmptyItem() + size;
 };
 
 const keyDown = () => {
@@ -88,11 +99,12 @@ const keyDown = () => {
   if (belowitemValue != null) {
     gridItems[belowitem - 1].innerHTML = "";
     gridItems[emptyitem - 1].innerHTML = belowitemValue;
+    count++;
   }
 };
 
 const getLeftitemValue = () => {
-  if (getEmptyItem() != 1 && getEmptyItem() != 4 && getEmptyItem() != 7)
+  if (getEmptyItem() % size != 1)
     return gridItems[getEmptyItem() - 2].innerHTML;
   else return null;
 };
@@ -107,12 +119,12 @@ const keyLeft = () => {
   if (leftitemValue != null) {
     gridItems[leftitem - 1].innerHTML = "";
     gridItems[emptyitem - 1].innerHTML = leftitemValue;
+    count++;
   }
 };
 
 const getRightitemValue = () => {
-  if (getEmptyItem() != 3 && getEmptyItem() != 6 && getEmptyItem() != 9)
-    return gridItems[getEmptyItem()].innerHTML;
+  if (getEmptyItem() % size != 0) return gridItems[getEmptyItem()].innerHTML;
   else return null;
 };
 const getRightitem = () => {
@@ -126,6 +138,7 @@ const keyRight = () => {
   if (rightitemValue != null) {
     gridItems[rightitem - 1].innerHTML = "";
     gridItems[emptyitem - 1].innerHTML = rightitemValue;
+    count++;
   }
 };
 
@@ -137,25 +150,21 @@ function handlePress(e) {
     case "ArrowUp":
       keyUp();
       winCongrats();
-      count++;
       dmoves.innerHTML = count;
       break;
     case "ArrowDown":
       keyDown();
       winCongrats();
-      count++;
       dmoves.innerHTML = count;
       break;
     case "ArrowLeft":
       keyLeft();
       winCongrats();
-      count++;
       dmoves.innerHTML = count;
       break;
     case "ArrowRight":
       keyRight();
       winCongrats();
-      count++;
       dmoves.innerHTML = count;
       break;
   }
@@ -193,8 +202,8 @@ const HandleClick = (e) => {
   let gettargetvalue = e.target.innerHTML;
 
   if (
-    targetitem == getemptyitem - 3 /* 3 is size */ ||
-    targetitem == getemptyitem + 3 ||
+    targetitem == getemptyitem - size /* 3 is size */ ||
+    targetitem == getemptyitem + size ||
     targetitem == getemptyitem + 1 /* next position*/ ||
     targetitem == getemptyitem - 1 /* previous position*/
   ) {

@@ -37,8 +37,9 @@ body {
         grid-template-rows: repeat(3, 20vh);
     }
 }
-@media screen and (max-width: 600px){
+@media screen and (max-width: 690px){
     .grid-container{
+    padding-top: 8%;
     grid-template-columns: repeat(3,25vw);
     grid-template-rows: repeat(3, 20vh);
     }}
