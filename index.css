@@ -27,6 +27,8 @@ body {
     column-gap: 5px;
     grid-template-rows: repeat(3,20vh);
     row-gap: 5px;
+    margin-top: 5%;
+
 }
 
 /*Mobile Responsive*/
@@ -108,14 +110,56 @@ body {
 
     display: flex;
     justify-content: space-around;
-    margin: 2%;
     padding: 1px;
     width:auto;
     height: auto;
     word-wrap: break-word;
     box-shadow: 15px 15px 51px rgba(87, 83, 83, 0.5);
+    border-radius: 6px;
+    margin-top: -10%;
     
    }
+
+   .choose{ 
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2% 2%;
+            padding: 1px;
+            width: auto;
+            height: auto;
+            word-wrap: break-word;
+            box-shadow: 15px 15px 51px rgba(87, 83, 83, 0.5);
+            padding: 2%;
+            border-radius: 10px;
+            
+            
+
+   }
+   
+   .choose label{
+
+    font-size: x-large;
+   }
+   .inputt{
+    border-radius: 5px;
+    max-width: 80%;
+    padding: 5px;
+    margin: 1%;
+    background-color: rgb(189, 185, 185);
+   }
+   .start{
+    font-size: medium;
+    letter-spacing: 2px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 1%;
+    background-color: rgb(189, 185, 185);
+    box-shadow: 15px 15px 51px rgba(87, 83, 83, 0.5);
+}
+
+   
 
    .sub-d{
     width: 33.3%;

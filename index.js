@@ -1,18 +1,45 @@
+// window.onload = () => {
+
+// }
+
 const gridContainer = document.querySelector(".grid-container");
 const gContainer = document.getElementById("g-container");
-const btn = document.querySelector(".btn");
+const btn = document.getElementById("btn");
 const msg = document.querySelector(".message");
 const dmoves = document.querySelector(".d-moves");
 const dtimer = document.querySelector(".d-timer");
 const drounds = document.querySelector(".d-rounds");
+const des = document.getElementById("description");
+const choose = document.getElementById("choose");
+const input = document.getElementById("inputt");
+const start = document.getElementById("start");
 
-let size = 7;
-gridContainer.style.gridTemplateColumns = `repeat(${size},${
-  (size * 13) / size
-}vw)`;
-gridContainer.style.gridTemplateRows = `repeat(${size},${
-  (size * 10) / size
-}vh)`;
+let size = 3;
+
+// start.addEventListener("click", () => {
+//   window.location.href("index.html");
+//   des.style.display = "flex";
+//   gContainer.style.display = "grid";
+//   choose.style.display = "none";
+//   console.log(input.value);
+// });
+
+if (size < 6) {
+  gridContainer.style.gridTemplateColumns = `repeat(${size},${
+    (size * 13) / size
+  }vw)`;
+  gridContainer.style.gridTemplateRows = `repeat(${size},${
+    (size * 10) / size
+  }vh)`;
+} else {
+  gridContainer.style.gridTemplateColumns = `repeat(${size},${
+    (size * (65 / size)) / size
+  }vw)`;
+  gridContainer.style.gridTemplateRows = `repeat(${size},${
+    (size * (40 / size)) / size
+  }vh)`;
+}
+
 let items = [];
 
 for (let i = 1; i <= size * size; i++) items.push(i);
@@ -36,9 +63,9 @@ function shuffle(array) {
     }
   return array;
 }
+
 const makeItems = () => {
   let randomArray = shuffle(items);
-
   for (let i = 0; i < randomArray.length; i++) {
     let newItem = document.createElement("div");
     newItem.classList.add("grid-item");
@@ -52,9 +79,27 @@ makeItems();
 
 const gridItems = document.querySelectorAll(".grid-item");
 
-const renderItems = () => {};
+{
+  //Setting font-size according to number of items
+  if (size > 6) {
+    for (let i = 0; i < gridItems.length; i++)
+      `${(gridItems[i].style.fontSize = "x-large")}`;
+  }
+  if (size > 8) {
+    for (let i = 0; i < gridItems.length; i++)
+      `${(gridItems[i].style.fontSize = "large")}`;
+  }
 
-renderItems();
+  if (size > 13) {
+    for (let i = 0; i < gridItems.length; i++)
+      `${(gridItems[i].style.fontSize = "medium")}`;
+  }
+
+  if (size > 18) {
+    for (let i = 0; i < gridItems.length; i++)
+      `${(gridItems[i].style.fontSize = "small")}`;
+  }
+}
 
 const getEmptyItem = () => {
   for (let i = 0; i <= gridItems.length; i++) {
@@ -186,26 +231,22 @@ const winCongrats = () => {
   if (won == true) msg.style.display = "flex";
 };
 
-const handleClickInput = () => {
-  document.addEventListener("click", (e) => {});
-};
-
 const HandleClickInput = () => {
   document.addEventListener("click", HandleClick);
 };
 
 const HandleClick = (e) => {
   const arr = Array.from(gridItems);
-
-  let getemptyitem = getEmptyItem();
   let targetitem = arr.indexOf(e.target) + 1;
+  let getemptyitem = getEmptyItem();
   let gettargetvalue = e.target.innerHTML;
 
   if (
-    targetitem == getemptyitem - size /* 3 is size */ ||
-    targetitem == getemptyitem + size ||
-    targetitem == getemptyitem + 1 /* next position*/ ||
-    targetitem == getemptyitem - 1 /* previous position*/
+    (targetitem == getemptyitem - size /* 3 is size */ ||
+      targetitem == getemptyitem + size ||
+      targetitem == getemptyitem + 1 /* next position*/ ||
+      targetitem == getemptyitem - 1) /* previous position*/ &&
+    e.target.getAttribute("class").includes("grid-item")
   ) {
     let temp = gettargetvalue;
     e.target.innerHTML = "";
@@ -245,8 +286,17 @@ timer();
 
 setInterval(timer, 1000);
 
+const roundShuffle = () => {
+  let randomArray = shuffle(items);
+
+  for (let i = 0; i < gridItems.length; i++) {
+    if (randomArray[i] == gridItems.length) gridItems[i].innerHTML = "";
+    else gridItems[i].innerHTML = randomArray[i];
+  }
+};
+
 btn.addEventListener("click", () => {
-  renderItems();
+  roundShuffle();
   count = 0;
   seconds = 0;
   hours = 0;
