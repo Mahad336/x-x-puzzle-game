@@ -13,16 +13,9 @@ const des = document.getElementById("description");
 const choose = document.getElementById("choose");
 const input = document.getElementById("inputt");
 const start = document.getElementById("start");
+const target = document.getElementById("target");
 
-let size = 3;
-
-// start.addEventListener("click", () => {
-//   window.location.href("index.html");
-//   des.style.display = "flex";
-//   gContainer.style.display = "grid";
-//   choose.style.display = "none";
-//   console.log(input.value);
-// });
+let size = 5;
 
 if (size < 6) {
   gridContainer.style.gridTemplateColumns = `repeat(${size},${
@@ -48,7 +41,21 @@ var count = 0;
 var seconds = 0;
 var hours = 0;
 var minutes = 0;
-var rounds = 0;
+var rounds;
+
+let max = 0;
+for (let i = 0; i < localStorage.length; i++) {
+  let localkey = localStorage.key(i);
+  if (localkey.includes("round")) {
+    let b = parseInt(localStorage.getItem(localkey));
+    if (b > max) max = b;
+  } else continue;
+}
+let roundRecord = max;
+console.log(roundRecord);
+if (roundRecord != null && roundRecord > 0) rounds = roundRecord;
+else rounds = 0;
+drounds.innerHTML = rounds;
 
 function shuffle(array) {
   var tmp,
@@ -295,14 +302,67 @@ const roundShuffle = () => {
   }
 };
 
+let temp = []; //rounds html data
+
 btn.addEventListener("click", () => {
   roundShuffle();
+  let duration = `${hours}:${minutes}:${seconds}`;
+  rounds++;
+  localStorage.setItem("moves" + rounds, count);
+  localStorage.setItem("duration" + rounds, duration);
+  localStorage.setItem("round" + rounds, rounds);
+
   count = 0;
   seconds = 0;
   hours = 0;
   minutes = 0;
-  rounds++;
+
   msg.style.display = "none";
   drounds.innerHTML = rounds;
   dmoves.innerHTML = count;
+
+  // temp.push(
+  //   `<div class="description description1" id="description">
+  //       <div class="moves sub-d">
+  //         <p class="head h-moves">Moves</p>
+  //         <p class="des d-moves">${localStorage.getItem(`moves${rounds}`)}</p>
+  //       </div>
+  //       <div class="timer sub-d">
+  //         <p class="head h-timer">Duration</p>
+  //         <p class="des d-timer">${localStorage.getItem(
+  //           `duration${rounds}`
+  //         )}</p>
+  //       </div>
+  //       <div class="rounds sub-d">
+  //         <p class="head h-rounds">Rounds</p>
+  //         <p class="des d-rounds">${localStorage.getItem(`round${rounds}`)}</p>
+  //       </div>
+  //     </div>`
+  // );
+  window.location.reload();
 });
+
+const renderDetails = () => {
+  for (let i = 1; i < localStorage.length / 3 - 1; i++) {
+    temp.push(
+      `<div class="description description1" id="description">
+        <div class="moves sub-d">
+          <p class="head h-moves">Moves</p>
+          <p class="des d-moves">${localStorage.getItem(`moves${i}`)}</p>
+        </div>
+        <div class="timer sub-d">
+          <p class="head h-timer">Duration</p>
+          <p class="des d-timer">${localStorage.getItem(`duration${i}`)}</p>
+        </div>
+        <div class="rounds sub-d">
+          <p class="head h-rounds">Round</p>
+          <p class="des d-rounds">${localStorage.getItem(`round${i}`)}</p>
+        </div>
+      </div>`
+    );
+  }
+  target.innerHTML = temp.reverse();
+};
+
+renderDetails();
+//localStorage.clear();
