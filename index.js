@@ -43,19 +43,22 @@ var hours = 0;
 var minutes = 0;
 var rounds;
 
-let max = 0;
-for (let i = 0; i < localStorage.length; i++) {
-  let localkey = localStorage.key(i);
-  if (localkey.includes("round")) {
-    let b = parseInt(localStorage.getItem(localkey));
-    if (b > max) max = b;
-  } else continue;
-}
-let roundRecord = max;
-console.log(roundRecord);
-if (roundRecord != null && roundRecord > 0) rounds = roundRecord;
-else rounds = 0;
-drounds.innerHTML = rounds;
+const getRrounds = () => {
+  let max = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    let localkey = localStorage.key(i);
+    if (localkey.includes("round")) {
+      let b = parseInt(localStorage.getItem(localkey));
+      if (b > max) max = b;
+    } else continue;
+  }
+  let roundRecord = max;
+  console.log(roundRecord);
+  if (roundRecord != null && roundRecord > 0) rounds = roundRecord;
+  else rounds = 0;
+  drounds.innerHTML = parseInt(rounds) + 1;
+};
+getRrounds();
 
 function shuffle(array) {
   var tmp,
@@ -306,7 +309,10 @@ let temp = []; //rounds html data
 
 btn.addEventListener("click", () => {
   roundShuffle();
-  let duration = `${hours}:${minutes}:${seconds}`;
+
+  let duration = `${hours < 10 ? "0" + hours : hours}:${
+    minutes < 10 ? "0" + minutes : minutes
+  }:${seconds < 10 ? "0" + seconds : seconds}`;
   rounds++;
   localStorage.setItem("moves" + rounds, count);
   localStorage.setItem("duration" + rounds, duration);
@@ -317,8 +323,8 @@ btn.addEventListener("click", () => {
   hours = 0;
   minutes = 0;
 
-  msg.style.display = "none";
-  drounds.innerHTML = rounds;
+  //msg.style.display = "none";
+  drounds.innerHTML = parseInt(rounds) + 1;
   dmoves.innerHTML = count;
 
   // temp.push(
@@ -339,11 +345,15 @@ btn.addEventListener("click", () => {
   //       </div>
   //     </div>`
   // );
-  window.location.reload();
+  //window.location.reload();
+  getRrounds();
+  renderDetails();
 });
 
 const renderDetails = () => {
-  for (let i = 1; i < localStorage.length / 3 - 1; i++) {
+  temp.length = 0;
+  for (let i = 0; i <= localStorage.length / 3; i++) {
+    if (i == 0) continue;
     temp.push(
       `<div class="description description1" id="description">
         <div class="moves sub-d">
@@ -364,5 +374,5 @@ const renderDetails = () => {
   target.innerHTML = temp.reverse();
 };
 
-renderDetails();
-//localStorage.clear();
+//renderDetails();
+//  localStorage.clear();
