@@ -92,7 +92,7 @@ body {
     font-size: large;
     border-radius: 10px;
     flex-direction: column;
-    /* display: none; */
+    display: none;
 
 
  }
