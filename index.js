@@ -15,7 +15,7 @@ const input = document.getElementById("inputt");
 const start = document.getElementById("start");
 const target = document.getElementById("target");
 
-let size = 5;
+let size = 3;
 
 if (size < 6) {
   gridContainer.style.gridTemplateColumns = `repeat(${size},${
